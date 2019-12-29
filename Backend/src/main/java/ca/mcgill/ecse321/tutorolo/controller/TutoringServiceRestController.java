@@ -20,6 +20,9 @@ public class TutoringServiceRestController {
 		TutoringServiceService service;
 
 		
+		//--------------------------------POST MAPPINGS--------------------------------//
+		
+		
 		@PostMapping("/student/create/{email}")
 		public StudentDto createStudent(@PathVariable("email") String email, @RequestParam String password, @RequestParam String name,
 				@RequestParam Integer studentId) {
@@ -125,7 +128,33 @@ public class TutoringServiceRestController {
 			return convertToDto(a);
 		}
 		
+
+		@PostMapping(value = { "/tutors/add/course/{courseName}"})
+		public TutorDto addCourseToTutor(@PathVariable("courseName") String courseName, @RequestParam String tutEmail) {
+			Tutor t = service.getTutor(tutEmail);
+			Course course = service.getCourseByCourseName(courseName);
+			Set<Course> c = t.getCoursesOffered();
+			c.add(course);
+			t.setCoursesOffered(c);
+			return convertToDto(t);
+		}
+
+		@PostMapping(value = { "availabilities/remove/{start}"})
+		@SuppressWarnings("unused")
+		public void removeSelectedAv(@PathVariable("start") String start, @RequestParam String tutEmail) {
+			Tutor t = service.getTutor(tutEmail);
+			for(Availability a: service.getAllAvailability())
+			{
+				if(a.getTutor().getEmail() == tutEmail && a.getStartTime() == Time.valueOf(start))
+				{
+					int id = a.getId();
+					service.deleteAvailability(id);
+				}
+			}
+		}
+	
 		
+		//--------------------------------GET MAPPINGS---------------------------------//
 		
 		@GetMapping(value = { "/students", "/students/" })
 		public List<StudentDto> getAllStudents() {
@@ -135,9 +164,6 @@ public class TutoringServiceRestController {
 			}
 			return studentDtos;
 		}
-		
-
-		
 		
 		@GetMapping(value = { "/tutors", "/tutors/" })
 		public List<TutorDto> getAllTutors() {
@@ -157,7 +183,6 @@ public class TutoringServiceRestController {
 			}
 			return courseDtos;
 		}
-		
 		
 		@GetMapping(value = { "/scheduledCourses", "/scheduledCourses/" })
 		public List<ScheduledCourseDto> getAllScheduledCourses() {
@@ -216,17 +241,6 @@ public class TutoringServiceRestController {
 		}
 		
 		
-		@PostMapping(value = { "/tutors/add/course/{courseName}"})
-		public TutorDto addCourseToTutor(@PathVariable("courseName") String courseName, @RequestParam String tutEmail) {
-			Tutor t = service.getTutor(tutEmail);
-			Course course = service.getCourseByCourseName(courseName);
-			Set<Course> c = t.getCoursesOffered();
-			c.add(course);
-			t.setCoursesOffered(c);
-			return convertToDto(t);
-		}
-
-		
 		@GetMapping(value = { "/tutors/courses/{course}"})
 		public List<TutorDto> getTutorByCourses(@PathVariable("course") String courseName) {
 			Course c = service.getCourseByCourseName(courseName);
@@ -236,7 +250,6 @@ public class TutoringServiceRestController {
 			}
 			return td;
 		}
-		
 		
 		@GetMapping(value = { "/tutors/reviews/{email}"})
 		public Integer getAllTutorReviewNumber(@PathVariable("email") String tutEmail) {
@@ -251,14 +264,12 @@ public class TutoringServiceRestController {
 			return r.size();
 		}
 
-		
 		@GetMapping(value = { "scheduledCourse/{id}"})
 		public ScheduledCourseDto getScheduedCourseById(@PathVariable("id") Integer id) {
 			ScheduledCourse sc = service.getScheduledCourse(id);
 			ScheduledCourseDto scheduledCourseDto = convertToDto(sc);
 			return scheduledCourseDto;
 		}
-		
 		
 		@GetMapping(value = { "tutors/availabilities/{email}"})
 		public List<AvailabilityDto> getAvailabilitiesOfTutor(@PathVariable("email") String tutEmail) {
@@ -277,20 +288,6 @@ public class TutoringServiceRestController {
 		public Integer getScNum() {
 			return service.getAllScheduledCourses().size();
 		}
-		
-		@PostMapping(value = { "availabilities/remove/{start}"})
-		public void removeSelectedAv(@PathVariable("start") String start, @RequestParam String tutEmail) {
-			Tutor t = service.getTutor(tutEmail);
-			for(Availability a: service.getAllAvailability())
-			{
-				if(a.getTutor().getEmail() == tutEmail && a.getStartTime() == Time.valueOf(start))
-				{
-					int id = a.getId();
-					service.deleteAvailability(id);
-				}
-			}
-		}
-		
 		
 		@GetMapping(value = { "/login/{email}", "/login/{email}/" })
 		public StudentDto login(@PathVariable("email") String email, @RequestParam("password") String password) {
@@ -312,6 +309,8 @@ public class TutoringServiceRestController {
 			return students.get(0);
 			}
 		
+		
+		//--------------------------------OTHER METHODS--------------------------------//
 		
 		private StudentDto convertToDto(Student s) {
 			if (s == null) 

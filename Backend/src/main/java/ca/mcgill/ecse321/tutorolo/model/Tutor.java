@@ -1,7 +1,6 @@
 package ca.mcgill.ecse321.tutorolo.model;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.GeneratedValue;
 import java.util.Set;

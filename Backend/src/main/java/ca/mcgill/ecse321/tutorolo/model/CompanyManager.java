@@ -3,7 +3,6 @@ package ca.mcgill.ecse321.tutorolo.model;
 import javax.persistence.Entity;
 import java.util.Set;
 import javax.persistence.OneToMany;
-import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 
 @Entity

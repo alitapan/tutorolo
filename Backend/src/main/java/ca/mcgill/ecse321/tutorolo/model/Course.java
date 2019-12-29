@@ -9,6 +9,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.ManyToMany;
 
 @Entity
+@SuppressWarnings("deprecation")
 public class Course{
 private String courseName;
    

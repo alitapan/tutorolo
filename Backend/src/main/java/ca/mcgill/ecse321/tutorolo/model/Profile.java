@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
+@SuppressWarnings("deprecation")
 public class Profile{
 private String email;
    
