@@ -1,4 +1,4 @@
-# tutorolo
+# tutorolo 💫
 
 A tutoring service application developed using DAO design pattern. This project ran over a course of 3 sprints:
 
