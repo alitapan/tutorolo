@@ -7,3 +7,6 @@ A tutoring service application developed using DAO design pattern. This project 
 - Sprint 3: Web Frontend and Architecture
 
 Upcoming features: Android integration and release
+
+Database hosted on a Postgres DBMS instance associated with a Heroku app. A persistence layer was
+developed to access data from Backend using Hibernate.
